@@ -8,6 +8,8 @@ const PORT = 5050;
 
 const prisma = new PrismaClient();
 
+app.use(express.json());
+
 app.post(
   "/api/auth/register",
   async (req: express.Request, res: express.Response) => {
