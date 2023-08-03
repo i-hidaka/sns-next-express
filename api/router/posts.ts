@@ -24,4 +24,21 @@ router.post("/post", async (req: express.Request, res: express.Response) => {
   }
 });
 
+// 最新つぶやき取得
+router.get(
+  "/get_latest_post",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const latestPosts = await prisma.post.findMany({
+        take: 10,
+        orderBy: { createdAt: "desc" },
+      });
+      res.json(latestPosts);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "サーバーエラーです。" });
+    }
+  }
+);
+
 export default router;
