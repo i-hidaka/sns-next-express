@@ -1,4 +1,5 @@
-import React, { ReactNode, useContext } from "react";
+import apiClient from "@/lib/apiClient";
+import React, { ReactNode, useContext, useEffect } from "react";
 
 interface AuthContextType {
   login: (token: string) => void;
@@ -15,6 +16,11 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
+  }, []);
+
   const login = (token: string) => {
     localStorage.setItem("auth_token", token);
   };
