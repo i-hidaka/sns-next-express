@@ -1,6 +1,12 @@
+import { PostType } from "@/types";
 import React from "react";
 
-export default function Post() {
+type Props = {
+  post: PostType;
+};
+
+export default function Post(props: Props) {
+  const { post } = props;
   return (
     <div className="bg-white shadow-md rounded p-4 mb-4">
       <div className="mb-4">
@@ -11,11 +17,11 @@ export default function Post() {
             alt="User Avatar"
           />
           <div>
-            <h2 className="font-semibold text-md">shincode</h2>
-            <p className="text-gray-500 text-sm">04/04 13:12</p>
+            <h2 className="font-semibold text-md">{post.author?.username}</h2>
+            <p className="text-gray-500 text-sm">{post.createdAt}</p>
           </div>
         </div>
-        <p className="text-gray-700">はじめての投稿です。</p>
+        <p className="text-gray-700">{post.content}</p>
       </div>
     </div>
   );
