@@ -1,7 +1,34 @@
+import { useAuth } from "@/context/auth";
+import apiClient from "@/lib/apiClient";
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 export default function login() {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const router = useRouter();
+  const { login } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await apiClient.post("/auth/login", {
+        email,
+        password,
+      });
+      const token = response.data.token;
+
+      login(token);
+
+      router.push("/");
+    } catch (err) {
+      alert("入力内容が正しくありません");
+    }
+  };
+
   return (
     <div
       style={{ height: "88vh" }}
@@ -17,7 +44,7 @@ export default function login() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -32,6 +59,9 @@ export default function login() {
                 autoComplete="email"
                 required
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setEmail(e.target.value);
+                }}
               />
             </div>
             <div className="mt-6">
@@ -48,6 +78,9 @@ export default function login() {
                 autoComplete="current-password"
                 required
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPassword(e.target.value);
+                }}
               />
             </div>
             <div className="mt-6">
