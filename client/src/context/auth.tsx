@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
 
       apiClient
-        .get("/user/find")
+        .get("/users/find")
         .then((res) => {
           setUser(res.data.user);
         })
