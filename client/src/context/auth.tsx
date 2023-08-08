@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (token: string) => {
     localStorage.setItem("auth_token", token);
+    apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
     try {
       apiClient.get("/users/find").then((res) => {
         setUser(res.data.user);
@@ -54,6 +55,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("auth_token");
+    delete apiClient.defaults.headers["Authorization"];
+    setUser(null);
   };
 
   const value = { login, logout, user };
