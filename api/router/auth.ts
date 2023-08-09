@@ -4,6 +4,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateIdenticon } from "../utils/generateIdenticon";
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -16,15 +17,18 @@ router.post(
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const defaultIconImage = generateIdenticon(email);
+
     const user = await prisma.user.create({
       data: {
         username,
         email,
         password: hashedPassword,
         profile: {
-          create: { bio: "はじめまして", profileImageUrl: "sample.png" },
+          create: { bio: "はじめまして", profileImageUrl: defaultIconImage },
         },
       },
+      include: { profile: true },
     });
 
     return res.json({ user });

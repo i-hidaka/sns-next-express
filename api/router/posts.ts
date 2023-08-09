@@ -20,7 +20,13 @@ router.post(
           content,
           authorID: req.body.userId,
         },
-        include: { author: true },
+        include: {
+          author: {
+            include: {
+              profile: true,
+            },
+          },
+        },
       });
       res.status(201).json(newPost);
     } catch (err) {
@@ -38,7 +44,7 @@ router.get(
       const latestPosts = await prisma.post.findMany({
         take: 10,
         orderBy: { createdAt: "desc" },
-        include: { author: true },
+        include: { author: { include: { profile: true } } },
       });
       res.json(latestPosts);
     } catch (err) {
