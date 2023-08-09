@@ -17,7 +17,14 @@ router.post(
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
-      data: { username, email, password: hashedPassword },
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        profile: {
+          create: { bio: "はじめまして", profileImageUrl: "sample.png" },
+        },
+      },
     });
 
     return res.json({ user });
