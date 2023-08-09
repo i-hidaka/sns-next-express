@@ -27,4 +27,26 @@ router.get(
   }
 );
 
+router.get(
+  "/profile/:userId",
+  async (req: express.Request, res: express.Response) => {
+    const { userId } = req.params;
+
+    try {
+      const profile = await prisma.profile.findUnique({
+        where: { userId: parseInt(userId) },
+        include: { user: { include: { profile: true } } },
+      });
+      if (!profile) {
+        return res
+          .status(404)
+          .json({ message: "プロフィールが見つかりませんでした。" });
+      }
+      res.status(200).json(profile);
+    } catch (err: any) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
 export default router;
