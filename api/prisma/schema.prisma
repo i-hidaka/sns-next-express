@@ -17,6 +17,7 @@ model User{
   email String @unique
   password String
   post Post[]
+  profile Profile?
 }
 
 model Post{
@@ -25,4 +26,12 @@ model Post{
   createdAt DateTime @default(now())
   authorID Int
   author User @relation(fields: [authorID],references: [id])
+}
+
+model Profile{
+  id Int @id @default(autoincrement())
+  bio String?
+  profileImageUrl String?
+  userId Int @unique
+  user User @relation(fields: [userId],references: [id])
 }
