@@ -1,12 +1,14 @@
 import apiClient from "@/lib/apiClient";
 import { ProfileType } from "@/types";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import React from "react";
 
 type Props = {
   profile: ProfileType;
 };
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const { userId } = context.query;
 
   try {
